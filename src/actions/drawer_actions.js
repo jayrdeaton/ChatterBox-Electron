@@ -4,13 +4,13 @@ const MAKE_PERMANENT = 'MAKE_PERMANENT';
 const MAKE_NOT_PERMANENT = 'MAKE_NOT_PERMANENT';
 
 const closeDrawer = () => {
-  sessionStorage.setItem('drawer_open', false);
+  localStorage.setItem('drawer_open', false);
   return {
     type: CLOSE_DRAWER
   };
 };
 const openDrawer = () => {
-  sessionStorage.setItem('drawer_open', true);
+  localStorage.setItem('drawer_open', true);
   return {
     type: OPEN_DRAWER
   };

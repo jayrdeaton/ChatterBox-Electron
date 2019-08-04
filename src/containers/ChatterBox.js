@@ -25,24 +25,24 @@ class ChatterBox extends Component {
     this.setupWebsocket();
   };
   getDefaults = () => {
-    let client = sessionStorage.getItem('chatterbox_client_id');
+    let client = localStorage.getItem('chatterbox_client_id');
     if (!client) {
       client = uuid.v1();
-      sessionStorage.setItem('chatterbox_client_id', client);
+      localStorage.setItem('chatterbox_client_id', client);
     };
-    const language = sessionStorage.getItem('chatterbox_language') || 'English';
-    const name = sessionStorage.getItem('chatterbox_name') || '';
-    let speed = sessionStorage.getItem('chatterbox_speed') || 1;
+    const language = localStorage.getItem('chatterbox_language') || 'English';
+    const name = localStorage.getItem('chatterbox_name') || '';
+    let speed = localStorage.getItem('chatterbox_speed') || 1;
     speed = parseFloat(speed);
-    let voice = sessionStorage.getItem('chatterbox_voice') || Math.round(Math.random() * voices[language].length);
+    let voice = localStorage.getItem('chatterbox_voice') || Math.round(Math.random() * voices[language].length);
     voice = parseFloat(voice);
     return { client, language, name, speed, voice };
   };
   setDefaults = ({ language, name, speed, voice }) => {
-    sessionStorage.setItem('chatterbox_language', language);
-    sessionStorage.setItem('chatterbox_name', name);
-    sessionStorage.setItem('chatterbox_speed', speed);
-    sessionStorage.setItem('chatterbox_voice', voice);
+    localStorage.setItem('chatterbox_language', language);
+    localStorage.setItem('chatterbox_name', name);
+    localStorage.setItem('chatterbox_speed', speed);
+    localStorage.setItem('chatterbox_voice', voice);
   };
   setupWebsocket = async () => {
     const websocket = new WebSocket(`${WS_DOMAIN}/websocket`);
