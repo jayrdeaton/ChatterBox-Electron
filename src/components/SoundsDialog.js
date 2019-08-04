@@ -9,11 +9,11 @@ import { sounds } from '../refs';
 
 class SoundsDialog extends Component {
   render() {
-    const { classes, onClose, onSubmit } = this.props;
+    const { classes, onClose, onSubmit, open } = this.props;
     return (
       <Dialog
-        open={this.props.open}
-        onClose={this.handleCancel}
+        open={open}
+        onClose={onClose}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         scroll={'body'}
