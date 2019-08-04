@@ -130,6 +130,7 @@ class ChatterBox extends Component {
   };
 };
 const styles = theme => ({
+  test: console.log(theme),
   appBarSpacer: theme.mixins.toolbar,
   root: {
     height: '100%',
@@ -139,7 +140,15 @@ const styles = theme => ({
     overflow: 'scroll'
   },
   formWrapper: {
-    margin: theme.spacing(2)
+    position: 'fixed',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: theme.spacing(2),
+    paddingTop: theme.spacing(),
+    backgroundColor: theme.palette.background.default,
+    zIndex: 43,
+    // margin: theme.spacing(2)
   },
   history: {
     flexDirection: 'column-reverse',

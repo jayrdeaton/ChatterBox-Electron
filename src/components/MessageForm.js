@@ -53,7 +53,7 @@ class MessageForm extends Component {
               className={classes.submit}
               size='small'
             >
-              <SendIcon />
+              <SendIcon fontSize='small' />
             </Fab>
           </Grid>
         </form>
@@ -72,9 +72,10 @@ const styles = theme => ({
   },
   submit: {
     // margin: theme.spacing(),
-    [theme.breakpoints.down('xs')]: {
-      // height: 15,
-      // width: 15
+    [theme.breakpoints.up('md')]: {
+      height: 15,
+      width: 15,
+      // fontSize: 15,
     },
   }
 });

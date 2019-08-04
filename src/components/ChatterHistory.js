@@ -7,37 +7,43 @@ import classNames from 'class-names'
 
 let ChatterHistory = ({ classes, client, history, onClick, theme }) => {
   return (
-    <div className={classes.history}>
-      {history.map((chatter, index) =>
-        <div key={chatter.id} className={classNames(classes.message, chatter.client === client && classes.clientMessage)}>
-          <Typography align={chatter.client === client ? 'right' : 'left'} className={classes.name} color='textSecondary' variant='caption'>
-            {chatter.name ? chatter.name : voices[chatter.language][chatter.voice]}
-          </Typography>
-          <Paper className={classNames(classes.paper, chatter.client === client && classes.clientPaper)} >
-            <ButtonBase onClick={() => onClick(chatter)}>
-              {chatter.message ?
-                <Typography align={chatter.client === client ? 'right' : 'left'} color='inherit' variant='subtitle1' component='p'>
-                  {chatter.message}
-                </Typography>
-              : null}
-              {!isNaN(chatter.sound) ?
-                <Typography style={{width: '100%'}} align='center' color='inherit' variant='subtitle1' component='p'>
-                  *{sounds[chatter.sound]}*
-                </Typography>
-              : null}
-            </ButtonBase>
-          </Paper>
-        </div>
-      )}
+    <div className={classes.wrapper}>
+      <div className={classes.history}>
+        {history.map((chatter, index) =>
+          <div key={chatter.id} className={classNames(classes.message, chatter.client === client && classes.clientMessage)}>
+            <Typography align={chatter.client === client ? 'right' : 'left'} className={classes.name} color='textSecondary' variant='caption'>
+              {chatter.name ? chatter.name : voices[chatter.language][chatter.voice]}
+            </Typography>
+            <Paper className={classNames(classes.paper, chatter.client === client && classes.clientPaper)} >
+              <ButtonBase onClick={() => onClick(chatter)}>
+                {chatter.message ?
+                  <Typography align={chatter.client === client ? 'right' : 'left'} color='inherit' variant='subtitle1' component='p'>
+                    {chatter.message}
+                  </Typography>
+                : null}
+                {!isNaN(chatter.sound) ?
+                  <Typography style={{width: '100%'}} align='center' color='inherit' variant='subtitle1' component='p'>
+                    *{sounds[chatter.sound]}*
+                  </Typography>
+                : null}
+              </ButtonBase>
+            </Paper>
+
+          </div>
+        )}
+      </div>
     </div>
   )
 }
 const styles = theme => ({
+  wrapper: {
+    paddingTop: 75,
+    paddingBottom: 85,
+  },
   history: {
     flex: 1,
     display: 'flex',
     height: '100%',
-    paddingTop: 72,
     flexDirection: 'column',
     justifyContent: 'flex-end'
   },
