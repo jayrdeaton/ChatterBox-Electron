@@ -3,98 +3,63 @@ import PropTypes from 'prop-types';
 import { ButtonBase, Grid, Paper, Typography } from '@material-ui/core';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import { sounds, voices } from '../refs';
+import classNames from 'class-names'
 
 let ChatterHistory = ({ classes, client, history, onClick, theme }) => {
   return (
-    <div className={classes.root}>
-      <div className={classes.appBarSpacer} />
+    <div className={classes.history}>
       {history.map((chatter, index) =>
-        <div key={chatter.id} className={classes.message}>
-          {chatter.client === client ?
-            <Grid container direction='row'>
-              <div className={classes.spacer} />
-              <div className={classes.chatter}>
-                <Grid container direction='row'>
-                  <Typography style={{marginLeft: 'auto'}} color='textSecondary' variant='caption'>
-                    {chatter.name ? chatter.name : voices[chatter.language][chatter.voice]}
-                  </Typography>
-                </Grid>
-                <Paper style={{color: 'white', backgroundColor: theme.palette.primary.main, padding: 0}} className={classes.paper}>
-                  <ButtonBase className={classes.button} onClick={() => onClick(chatter)}>
-                    {chatter.message ?
-                      <Typography color='inherit' variant='subtitle1' component='p'>
-                        {chatter.message}
-                      </Typography>
-                    : null}
-                    {!isNaN(chatter.sound) ?
-                      <Typography style={{width: '100%'}} align='center' color='inherit' variant='subtitle1' component='p'>
-                        *{sounds[chatter.sound]}*
-                      </Typography>
-                    : null}
-                  </ButtonBase>
-                </Paper>
-              </div>
-            </Grid>
-            :
-            <Grid container direction='row'>
-              <div className={classes.chatter}>
-                <Grid container direction='row'>
-                  <Typography color='textSecondary' variant='caption'>
-                    {voices[chatter.language][chatter.voice]}
-                  </Typography>
-                </Grid>
-                <Paper className={classes.paper}>
-                  <ButtonBase onClick={() => onClick(chatter)} style={{width: '100%', height: '100%', padding: theme.spacing(), justifyContent: 'flex-start'}}>
-                    {chatter.message ?
-                      <Typography color='textPrimary' variant='subtitle1' component='p'>
-                        {chatter.message}
-                      </Typography>
-                    : null}
-                    {!isNaN(chatter.sound) ?
-                      <Typography style={{width: '100%'}} align='center' color='inherit' variant='subtitle1' component='p'>
-                        *{sounds[chatter.sound]}*
-                      </Typography>
-                    : null}
-                  </ButtonBase>
-                </Paper>
-              </div>
-              <div className={classes.spacer} />
-            </Grid>
-          }
+        <div key={chatter.id} className={classNames(classes.message, chatter.client === client && classes.clientMessage)}>
+          <Typography align={chatter.client === client ? 'right' : 'left'} className={classes.name} color='textSecondary' variant='caption'>
+            {chatter.name ? chatter.name : voices[chatter.language][chatter.voice]}
+          </Typography>
+          <Paper className={classNames(classes.paper, chatter.client === client && classes.clientPaper)} >
+            <ButtonBase onClick={() => onClick(chatter)}>
+              {chatter.message ?
+                <Typography align={chatter.client === client ? 'right' : 'left'} color='inherit' variant='subtitle1' component='p'>
+                  {chatter.message}
+                </Typography>
+              : null}
+              {!isNaN(chatter.sound) ?
+                <Typography style={{width: '100%'}} align='center' color='inherit' variant='subtitle1' component='p'>
+                  *{sounds[chatter.sound]}*
+                </Typography>
+              : null}
+            </ButtonBase>
+          </Paper>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 const styles = theme => ({
-  appBarSpacer: theme.mixins.toolbar,
-  root: {
-    flexDirection: 'column-reverse',
-    margin: theme.spacing(2)
+  history: {
+    flex: 1,
+    display: 'flex',
+    height: '100%',
+    paddingTop: 72,
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
-  spacer: {
-    flex: 1
+  name: {
+    display: 'block',
   },
-  chatter: {
-    minWidth: '20%',
-    padding: theme.spacing(.5),
-    paddingTop: 0
+  message: {
+    alignSelf: 'flex-start',
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
+    marginTop: theme.spacing(.5)
+  },
+  clientMessage: {
+    alignSelf: 'flex-end',
   },
   paper: {
-    padding: theme.spacing()
+    paddingLeft: theme.spacing(),
+    paddingRight: theme.spacing()
   },
-  button: {
-    width: '100%',
-    height: '100%',
-    padding: theme.spacing(),
-    justifyContent: 'flex-start'
-  },
-  timestamp: {
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  redo: {
-    marginLeft: 'auto'
+  clientPaper: {
+    color: 'white',
+    backgroundColor: theme.palette.primary.main,
   }
 });
 
