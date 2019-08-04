@@ -17,7 +17,7 @@ let SettingsButton = (props) => {
 };
 const styles = theme => ({
   button: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(),
   }
 });
 SettingsButton = connect(null, { openSettings })(SettingsButton);

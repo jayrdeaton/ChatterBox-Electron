@@ -62,7 +62,7 @@ class SettingsDialog extends Component {
                 direction='column'
                 justify='space-between'
                 alignItems='center'
-                spacing={16}
+                spacing={0}
               >
                 <TextField
                   id='name'
@@ -101,7 +101,7 @@ class SettingsDialog extends Component {
 };
 const styles = theme => ({
   form: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 });
 SettingsDialog = withStyles(styles)(SettingsDialog);

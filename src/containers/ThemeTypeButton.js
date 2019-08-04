@@ -17,7 +17,7 @@ let ThemeTypeButton = (props) => {
 };
 const styles = theme => ({
   button: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(),
   }
 });
 const mapStateToProps = ({ theme }) => {

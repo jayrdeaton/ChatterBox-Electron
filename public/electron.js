@@ -3,7 +3,8 @@ const electron = require('electron'),
   path = require('path'),
   isDev = require('electron-is-dev'),
   Store = require('electron-store'),
-  store = new Store()
+  store = new Store(),
+  server = require('./resources')
 
 let mainWindow
 
@@ -25,7 +26,7 @@ const createMainWindow = () => {
   //   console.log(arg) // prints "ping"
   //   event.reply('pong', 'pong')
   // })
-  mainWindow.on("ping", () => console.log('ping'));
+  mainWindow.on("ping", () => console.log('ping'))
   mainWindow.once('ready-to-show', mainWindow.show)
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`)
   mainWindow.on('closed', () => mainWindow = null)

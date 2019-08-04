@@ -18,14 +18,14 @@ let App = ({ classes }) => {
 const styles = theme => ({
   root: {
     display: 'flex',
-    height: '100%',
-    width: '100%'
+    flex: 1,
+    height: '100%'
   },
   content: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
   listItem: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   }
 });
 App.propTypes = {

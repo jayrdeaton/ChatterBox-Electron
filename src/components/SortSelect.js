@@ -35,7 +35,7 @@ class SortSelect extends Component {
 };
 const styles = theme => ({
   formControl: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(),
     minWidth: 120,
   }
 });

@@ -17,7 +17,7 @@ let SoundsButton = (props) => {
 };
 const styles = theme => ({
   button: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(),
   }
 });
 SoundsButton = connect(null, { openSounds })(SoundsButton);

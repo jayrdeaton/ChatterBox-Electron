@@ -44,7 +44,7 @@ let ChatterHistory = ({ classes, client, history, onClick, theme }) => {
                   </Typography>
                 </Grid>
                 <Paper className={classes.paper}>
-                  <ButtonBase onClick={() => onClick(chatter)} style={{width: '100%', height: '100%', padding: theme.spacing.unit, justifyContent: 'flex-start'}}>
+                  <ButtonBase onClick={() => onClick(chatter)} style={{width: '100%', height: '100%', padding: theme.spacing(), justifyContent: 'flex-start'}}>
                     {chatter.message ?
                       <Typography color='textPrimary' variant='subtitle1' component='p'>
                         {chatter.message}
@@ -70,23 +70,23 @@ const styles = theme => ({
   appBarSpacer: theme.mixins.toolbar,
   root: {
     flexDirection: 'column-reverse',
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   spacer: {
     flex: 1
   },
   chatter: {
     minWidth: '20%',
-    padding: theme.spacing.unit / 2,
+    padding: theme.spacing(.5),
     paddingTop: 0
   },
   paper: {
-    padding: theme.spacing.unit
+    padding: theme.spacing()
   },
   button: {
     width: '100%',
     height: '100%',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(),
     justifyContent: 'flex-start'
   },
   timestamp: {

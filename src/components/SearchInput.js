@@ -41,7 +41,7 @@ const styles = theme => ({
     minWidth: 200
   },
   fab: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing()
   }
 });
 SearchInput = withStyles(styles)(SearchInput);

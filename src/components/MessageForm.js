@@ -32,7 +32,7 @@ class MessageForm extends Component {
             direction='row'
             justify='space-between'
             alignItems='center'
-            spacing={16}
+            spacing={0}
           >
             <TextField
               id='message'
@@ -64,14 +64,14 @@ class MessageForm extends Component {
 const styles = theme => ({
   message: {
     flexGrow: 1,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing()
     // margin: 0
   },
   voice: {
-    margin: theme.spacing.unit
+    margin: theme.spacing()
   },
   submit: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(),
     [theme.breakpoints.down('xs')]: {
       // height: 15,
       // width: 15

@@ -37,7 +37,7 @@ class SoundsDialog extends Component {
 };
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit / 2
+    margin: theme.spacing(.5)
   }
 });
 SoundsDialog = withStyles(styles)(SoundsDialog);

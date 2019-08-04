@@ -42,8 +42,8 @@ class AppHeader extends Component {
 };
 const styles = theme => ({
   toolbar: {
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit
+    paddingLeft: theme.spacing(),
+    paddingRight: theme.spacing()
   },
   appBar: {
     position: 'absolute',

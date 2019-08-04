@@ -14,13 +14,13 @@ app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 app.use(cors());
 // serve react build
-app.use(express.static(join(__dirname, '..', '..', 'client', 'build')));
+app.use(express.static(join(__dirname, '..', '..', '..', 'build')));
 // routers
 app.use('/api', api_router);
 
 // catchAll / send file
 app.use('*', (req, res) => {
-  res.sendFile(join(__dirname, '..', '..', 'client', 'build', 'index.html'));
+  res.sendFile(join(__dirname, '..', '..', '..', 'build', 'index.html'));
 });
 // error handler
 app.use((err, req, res, next) => {

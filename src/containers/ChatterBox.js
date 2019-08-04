@@ -10,7 +10,7 @@ import { settings_actions, sounds_actions } from '../actions';
 const { closeSettings } = settings_actions;
 const { closeSounds } = sounds_actions;
 
-const WS_DOMAIN = process.env.REACT_APP_DOMAIN ? `ws://${process.env.REACT_APP_DOMAIN}` : `ws://${window.location.host}`;
+const WS_DOMAIN = window.location.hostname ? `ws://${window.location.hostname}` : 'ws://localhost'
 
 class ChatterBox extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class ChatterBox extends Component {
     sessionStorage.setItem('chatterbox_speed', speed);
     sessionStorage.setItem('chatterbox_voice', voice);
   };
-  setupWebsocket = () => {
+  setupWebsocket = async () => {
     const websocket = new WebSocket(`${WS_DOMAIN}/websocket`);
     websocket.onmessage = (data) => {
       const { history } = this.state;
@@ -69,7 +69,8 @@ class ChatterBox extends Component {
     websocket.onclose = () => {
       setTimeout(this.setupWebsocket, 500);
     };
-    this.setState({ websocket });
+    await this.setState({ websocket });
+    // return websocket
   };
   updateHistory = (data) => {
     const { history } = this.state;
@@ -87,6 +88,9 @@ class ChatterBox extends Component {
   handleSubmit = async ({ message, sound }) => {
     if (!message && isNaN(sound)) return;
     const { client, language, name, speed, websocket  } = this.state;
+    // console.log(this.state.websocket)
+    // const websocket = this.state.websocket || await this.setupWebsocket()
+
     let { voice } = this.state;
     voice = voices[language][voice];
     const object = {
@@ -135,15 +139,15 @@ const styles = theme => ({
     overflow: 'scroll'
   },
   formWrapper: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   history: {
     flexDirection: 'column-reverse',
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   said: {
-    margin: theme.spacing.unit,
-    padding: theme.spacing.unit,
+    margin: theme.spacing(),
+    padding: theme.spacing(),
     paddingTop: 0
   },
   row: {
