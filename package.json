@@ -3,7 +3,10 @@
   "description": "ChatterBox application",
   "author": "Jay Deaton",
   "build": {
-    "appId": "com.chatterbox"
+    "appId": "com.chatterbox",
+    "directories": {
+      "buildResources": "./buildResources"
+    }
   },
   "main": "public/electron.js",
   "homepage": "./",
