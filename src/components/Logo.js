@@ -1,6 +1,6 @@
 import React from "react"
 
-const Icon = () => (
+const Icon = ({ className }) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     fillRule='evenodd'
@@ -9,6 +9,7 @@ const Icon = () => (
     strokeMiterlimit='1.5'
     clipRule='evenodd'
     viewBox='0 0 2000 2000'
+    className={className}
   >
     <path fill='none' d='M0 0H2000V2000H0z' />
     <path
