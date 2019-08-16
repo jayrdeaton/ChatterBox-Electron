@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ButtonBase, Grid, Paper, Typography } from '@material-ui/core';
+import { ButtonBase, Paper, Typography } from '@material-ui/core';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import { sounds, voices } from '../refs';
 import classNames from 'class-names'
