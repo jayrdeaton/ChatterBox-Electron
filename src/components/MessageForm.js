@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Fab, Grid, TextField } from '@material-ui/core';
+import { Grid, IconButton, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Send as SendIcon
@@ -47,14 +47,12 @@ class MessageForm extends Component {
               onChange={this.handleMessageChange}
               variant='outlined'
             />
-            <Fab
-              color='primary'
+            <IconButton
               type='submit'
               className={classes.submit}
-              size='small'
             >
-              <SendIcon fontSize='small' />
-            </Fab>
+              <SendIcon fontSize='inherit' />
+            </IconButton>
           </Grid>
         </form>
       </div>
@@ -68,14 +66,12 @@ const styles = theme => ({
     // margin: 0
   },
   voice: {
-    margin: theme.spacing()
+    // margin: theme.spacing()
   },
   submit: {
     // margin: theme.spacing(),
-    [theme.breakpoints.up('md')]: {
-      height: 15,
-      width: 15,
-      // fontSize: 15,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 15,
     },
   }
 });
