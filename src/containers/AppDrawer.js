@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { Drawer, Divider, IconButton } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { ChevronLeft } from '@material-ui/icons';
-import { config } from '../refs';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { Drawer, Divider, IconButton } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { ChevronLeft } from '@material-ui/icons'
+import { config } from '../refs'
 
-import { drawer_actions } from '../actions';
-const { closeDrawer, openDrawer } = drawer_actions;
+import { drawer_actions } from '../actions'
+const { closeDrawer, openDrawer } = drawer_actions
 
 class AppDrawer extends Component {
   render() {
-    const { classes } = this.props;
-    const open = this.props.drawer.open ? true : false;
+    const { classes } = this.props
+    const open = this.props.drawer.open ? true : false
     return (
       <Drawer
         variant='persistent'
@@ -30,9 +30,9 @@ class AppDrawer extends Component {
         <Divider />
         {this.props.children}
       </Drawer>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   toolbar: {
     paddingsRight: 24, // keep right padding when drawer closed
@@ -47,13 +47,13 @@ const styles = theme => ({
   drawerPaper: {
     width: config.drawer_width,
   },
-});
+})
 const mapStateToProps = ({ drawer }) => {
-  return { drawer };
-};
+  return { drawer }
+}
 AppDrawer.propTypes = {
   drawer: PropTypes.object.isRequired
-};
-AppDrawer = connect(mapStateToProps, { closeDrawer, openDrawer })(AppDrawer);
-AppDrawer = withStyles(styles)(AppDrawer);
+}
+AppDrawer = connect(mapStateToProps, { closeDrawer, openDrawer })(AppDrawer)
+AppDrawer = withStyles(styles)(AppDrawer)
 export default AppDrawer

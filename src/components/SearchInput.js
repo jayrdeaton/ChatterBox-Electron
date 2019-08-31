@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import {
   Fab,
   TextField
-} from '@material-ui/core';
+} from '@material-ui/core'
 import {
   Search as SearchIcon
-} from '@material-ui/icons';
+} from '@material-ui/icons'
 class SearchInput extends Component {
   render() {
-    const { classes, onChange, onSubmit, value } = this.props;
+    const { classes, onChange, onSubmit, value } = this.props
     return (
       <div className={classes.root}>
         <TextField
@@ -26,9 +26,9 @@ class SearchInput extends Component {
           <SearchIcon />
         </Fab>
       </div>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   root: {
     flex: 1,
@@ -43,6 +43,6 @@ const styles = theme => ({
   fab: {
     marginLeft: theme.spacing()
   }
-});
-SearchInput = withStyles(styles)(SearchInput);
-export default SearchInput;
+})
+SearchInput = withStyles(styles)(SearchInput)
+export default SearchInput

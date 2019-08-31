@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import {
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-} from '@material-ui/core';
+} from '@material-ui/core'
 
 class SortSelect extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
     return (
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor='sort-select'>Sort</InputLabel>
@@ -30,19 +30,19 @@ class SortSelect extends Component {
           <MenuItem value={'Decreasing Price'}>Decreasing Price</MenuItem>
         </Select>
       </FormControl>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   formControl: {
     // margin: theme.spacing(),
     minWidth: 120,
   }
-});
+})
 SortSelect.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   selection: PropTypes.string
-};
-SortSelect = withStyles(styles)(SortSelect);
-export default SortSelect;
+}
+SortSelect = withStyles(styles)(SortSelect)
+export default SortSelect

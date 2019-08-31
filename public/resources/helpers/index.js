@@ -1,5 +1,5 @@
-const runCommand = require('./runCommand');
+const runCommand = require('./runCommand')
 
 module.exports = {
   runCommand
-};
+}

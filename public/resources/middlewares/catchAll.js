@@ -1,5 +1,5 @@
-const createError = require('http-errors');
+const createError = require('http-errors')
 
 module.exports = async (req, res, next) => {
-  next(createError(404));
-};
+  next(createError(404))
+}

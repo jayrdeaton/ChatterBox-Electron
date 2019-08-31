@@ -1,5 +1,5 @@
-import ThemeProvider from './ThemeProvider';
+import ThemeProvider from './ThemeProvider'
 
 export {
   ThemeProvider
-};
+}

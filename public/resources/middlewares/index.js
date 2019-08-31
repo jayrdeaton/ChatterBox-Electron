@@ -1,7 +1,7 @@
 const accessControl = require('./accessControl'),
-  catchAll = require('./catchAll');
+  catchAll = require('./catchAll')
 
 module.exports = {
   accessControl,
   catchAll
-};
+}

@@ -1,7 +1,7 @@
 export default store => next => action => {
   if (action.payload instanceof Error) {
-    console.log('error caught!');
+    console.log('error caught!')
   } else {
-    return next(action);
-  };
-};
+    return next(action)
+  }
+}

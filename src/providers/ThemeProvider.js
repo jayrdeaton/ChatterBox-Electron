@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { CssBaseline } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { CssBaseline } from '@material-ui/core'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 class Theme extends Component {
   render() {
-    const { type } = this.props.theme;
+    const { type } = this.props.theme
     const theme = createMuiTheme({
       palette: {
       //   primary: {
@@ -30,20 +30,20 @@ class Theme extends Component {
       typography: {
         useNextVariants: true,
       }
-    });
+    })
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         {this.props.children}
       </MuiThemeProvider>
-    );
-  };
-};
+    )
+  }
+}
 const mapStateToProps = ({ theme }) => {
-  return { theme };
-};
+  return { theme }
+}
 Theme.propTypes = {
   theme: PropTypes.object.isRequired
-};
-Theme = connect(mapStateToProps)(Theme);
-export default Theme;
+}
+Theme = connect(mapStateToProps)(Theme)
+export default Theme

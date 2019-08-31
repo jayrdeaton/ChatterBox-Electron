@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle } from '@material-ui/core';
-import { sounds } from '../refs';
+  DialogTitle } from '@material-ui/core'
+import { sounds } from '../refs'
 
 class SoundsDialog extends Component {
   render() {
-    const { classes, onClose, onSubmit, open } = this.props;
+    const { classes, onClose, onSubmit, open } = this.props
     return (
       <Dialog
         open={open}
@@ -32,13 +32,13 @@ class SoundsDialog extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   button: {
     margin: theme.spacing(.5)
   }
-});
-SoundsDialog = withStyles(styles)(SoundsDialog);
-export default SoundsDialog;
+})
+SoundsDialog = withStyles(styles)(SoundsDialog)
+export default SoundsDialog

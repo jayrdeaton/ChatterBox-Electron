@@ -1,50 +1,41 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
-  TextField } from '@material-ui/core';
-import { LanguageSelect, SpeedSlider, VoiceSelect } from '../components';
+  TextField
+} from '@material-ui/core'
+import { LanguageSelect, SpeedSlider, VoiceSelect } from '../components'
 
 class SettingsDialog extends Component {
   constructor(props) {
-    super(props);
-    const { language, name, speed, voice } = props;
-    this.state = { language, name, speed, voice };
-  };
-  handleLanguageChange = (e) => {
-    this.setState({ language: e.target.value, voice: 0 });
-  };
-  handleNameChange = (e) => {
-    this.setState({ name: e.target.value });
-  };
-  handleSpeedChange = (e, speed) => {
-    this.setState({ speed });
-  };
-  handleVoiceChange = (e) => {
-    this.setState({ voice: e.target.value });
-  };
-  handleReset = () => {
-    this.setState({
-      language: 'English',
-      name: '',
-      speed: 1,
-      voice: 0
-    });
-  };
-  handleCancel = () => {
-    this.props.onSubmit();
-  };
+    super(props)
+    const { language, name, speed, voice } = props
+    this.state = { language, name, speed, voice }
+  }
+  handleLanguageChange = (e) => this.setState({ language: e.target.value, voice: 0 })
+  handleNameChange = (e) => this.setState({ name: e.target.value })
+  handleSpeedChange = (e, speed) => this.setState({ speed })
+  handleVoiceChange = (e) => this.setState({ voice: e.target.value })
+  handleReset = () => this.setState({
+    language: 'English',
+    name: '',
+    speed: 1,
+    voice: 0
+  })
+  handleCancel = () => this.props.onSubmit()
   handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.onSubmit(this.state);
-  };
+    e.preventDefault()
+    this.props.onSubmit(this.state)
+  }
   render() {
-    const { classes } = this.props;
-    const { language, name, speed, voice } = this.state;
+    const {
+      props: { classes },
+      state: { language, name, speed, voice }
+    } = this
     return (
       <Dialog
         open={this.props.open}
@@ -96,13 +87,13 @@ class SettingsDialog extends Component {
           </DialogActions>
         </form>
       </Dialog>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   form: {
     margin: theme.spacing(2)
   }
-});
-SettingsDialog = withStyles(styles)(SettingsDialog);
-export default SettingsDialog;
+})
+SettingsDialog = withStyles(styles)(SettingsDialog)
+export default SettingsDialog

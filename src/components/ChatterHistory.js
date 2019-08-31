@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ButtonBase, Paper, Typography } from '@material-ui/core';
-import { withStyles, withTheme } from '@material-ui/core/styles';
-import { sounds, voices } from '../refs';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ButtonBase, Paper, Typography } from '@material-ui/core'
+import { withStyles, withTheme } from '@material-ui/core/styles'
+import { sounds, voices } from '../refs'
 import classNames from 'class-names'
 
 let ChatterHistory = ({ classes, client, history, onClick, theme }) => {
@@ -67,12 +67,12 @@ const styles = theme => ({
     color: 'white',
     backgroundColor: theme.palette.primary.main,
   }
-});
+})
 
 ChatterHistory.propTypes = {
   classes: PropTypes.object.isRequired
-};
+}
 
-ChatterHistory = withStyles(styles)(ChatterHistory);
+ChatterHistory = withStyles(styles)(ChatterHistory)
 ChatterHistory = withTheme(ChatterHistory)
-export default ChatterHistory;
+export default ChatterHistory

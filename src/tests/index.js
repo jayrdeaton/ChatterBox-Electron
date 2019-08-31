@@ -1,5 +1,5 @@
-import AppTest from './App.test';
+import AppTest from './App.test'
 
 export {
   AppTest
-};
+}

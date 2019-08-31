@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle } from '@material-ui/core';
+  DialogTitle } from '@material-ui/core'
 
 class ErrorDialog extends Component {
   state = { name: null, message: null }
   componentWillReceiveProps(props) {
-    if (props.error) this.setState({ name: props.error.name, message: props.error.message });
-  };
+    if (props.error) this.setState({ name: props.error.name, message: props.error.message })
+  }
   render() {
     return (
       <Dialog
@@ -32,9 +32,9 @@ class ErrorDialog extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-    );
-  };
-};
+    )
+  }
+}
 const styles = theme => ({
   dialog: {
     // display: 'flex',
@@ -44,6 +44,6 @@ const styles = theme => ({
     // alignItems: 'center',
     // justifyContent: 'center'
   }
-});
-ErrorDialog = withStyles(styles)(ErrorDialog);
-export default ErrorDialog;
+})
+ErrorDialog = withStyles(styles)(ErrorDialog)
+export default ErrorDialog

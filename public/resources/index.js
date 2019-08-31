@@ -1,5 +1,5 @@
 const app = require('./app'),
   server = require('./server'),
-  websocket = require('./websocket');
+  websocket = require('./websocket')
 
-module.exports = server;
+module.exports = server

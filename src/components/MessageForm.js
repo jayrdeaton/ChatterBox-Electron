@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, TextField } from '@material-ui/core'
+import { Grid, IconButton, InputAdornment, TextField } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { Autorenew, Clear, Send } from '@material-ui/icons'
 import faker from 'faker'
