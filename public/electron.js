@@ -4,7 +4,7 @@ const electron = require('electron'),
   isDev = require('electron-is-dev'),
   Store = require('electron-store'),
   store = new Store(),
-  server = require('./resources')
+  server = require('./server')
 
 let mainWindow
 
