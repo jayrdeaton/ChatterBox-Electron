@@ -4,9 +4,10 @@ const electron = require('electron'),
   isDev = require('electron-is-dev'),
   Store = require('electron-store'),
   store = new Store(),
-  server = require('../server')
+  server = require('./server')
 
 let mainWindow
+let listening_port = null
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
@@ -17,15 +18,24 @@ const createMainWindow = () => {
     y: store.get('y'),
     show: false,
     // required for ipcRenderer to work
-    // webPreferences: {
-    //   nodeIntegration: true,
-    //   preload: __dirname + '/preload.js'
-    // }
+    webPreferences: {
+      nodeIntegration: true,
+      preload: __dirname + '/preload.js'
+    }
   })
-  // ipcMain.on('ping', (event, arg) => {
-  //   console.log(arg) // prints "ping"
-  //   event.reply('pong', 'pong')
-  // })
+  ipcMain.on('init', (e) => {
+    e.reply('status', listening_port)
+  })
+  ipcMain.on('start_server', (e, port) => {
+    server.listen(port)
+    listening_port = port
+    e.reply('started')
+  })
+  ipcMain.on('stop_server', (e) => {
+    server.close()
+    listening_port = null
+    e.reply('stopped')
+  })
   mainWindow.on("ping", () => console.log('ping'))
   mainWindow.once('ready-to-show', mainWindow.show)
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`)

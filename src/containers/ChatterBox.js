@@ -10,8 +10,6 @@ import { settings_actions, sounds_actions } from '../actions'
 const { closeSettings } = settings_actions
 const { closeSounds } = sounds_actions
 
-const WS_DOMAIN = window.location.hostname ? `ws://${window.location.hostname}` : 'ws://localhost'
-
 class ChatterBox extends Component {
   constructor(props) {
     super(props)
@@ -22,8 +20,12 @@ class ChatterBox extends Component {
     this.MessageForm = createRef()
   }
   componentWillMount() {
-    this.setupWebsocket()
+    if (!window.location.hostname || window.location.hostname !== 'localhost') this.setupWebsocket(window.location.port)
   }
+  componentWillReceiveProps(props) {
+    if (props.server.listening && !this.props.server.listening) this.setupWebsocket(props.server.port)
+  }
+
   getDefaults = () => {
     let client = localStorage.getItem('chatterbox_client_id')
     if (!client) {
@@ -45,8 +47,9 @@ class ChatterBox extends Component {
     localStorage.setItem('chatterbox_speed', speed)
     localStorage.setItem('chatterbox_voice', voice)
   }
-  setupWebsocket = async () => {
-    const websocket = new WebSocket(`${WS_DOMAIN}/websocket`)
+  setupWebsocket = async (port) => {
+    this.setState({ history: [] })
+    const websocket = new WebSocket(`ws://${window.location.hostname || 'localhost'}:${port}/websocket`)
     websocket.onmessage = (data) => {
       const { history } = this.state
       try {
@@ -131,7 +134,7 @@ class ChatterBox extends Component {
   }
 }
 const styles = theme => ({
-  test: console.log(theme),
+  // test: console.log(theme),
   appBarSpacer: theme.mixins.toolbar,
   root: {
     height: '100%',
@@ -178,7 +181,7 @@ ChatterBox.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-const mapStateToProps = ({ settings, sounds }) => { return { settings, sounds } }
+const mapStateToProps = ({ server, settings, sounds }) => { return { server, settings, sounds } }
 
 ChatterBox = connect(mapStateToProps, { closeSettings, closeSounds })(ChatterBox)
 ChatterBox = withStyles(styles)(ChatterBox)

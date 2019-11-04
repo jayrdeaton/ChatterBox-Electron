@@ -1,14 +1,16 @@
 const SERVER_START = 'SERVER_START'
 const SERVER_STOP = 'SERVER_STOP'
 
-const startServer = () => {
+const startServer = (payload) => {
   return {
-    type: SERVER_START
+    type: SERVER_START,
+    payload
   }
 }
-const stopServer = () => {
+const stopServer = (payload) => {
   return {
-    type: SERVER_STOP
+    type: SERVER_STOP,
+    payload
   }
 }
 
