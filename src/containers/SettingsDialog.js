@@ -27,6 +27,13 @@ class SettingsDialog extends Component {
       this.props.startServer(port)
     })
   }
+  handleColorChange = (e) => this.props.setColor(e.target.value)
+  handleLanguageChange = (e) => this.props.setLanguage(e.target.value)
+  handleNameChange = (e) => this.props.setName(e.target.value)
+  handlePortChange = (e) => this.setState({ port: e.target.value })
+  handleSpeedChange = (speed) => this.props.setSpeed(speed)
+  handleThemeChange = (e) => this.props.setTheme(e.target.value)
+  handleVoiceChange = (e) => this.props.setVoice(e.target.value)
   toggleServer = () => {
     const {
       props: { startServer, stopServer, server: { listening } },
@@ -40,21 +47,16 @@ class SettingsDialog extends Component {
       startServer(port)
     }
   }
-  handleColorChange = (e) => this.props.setColor(e.target.value)
-  handleLanguageChange = (e) => this.props.setLanguage(e.target.value)
-  handleNameChange = (e) => this.props.setName(e.target.value)
-  handlePortChange = (e) => this.setState({ port: e.target.value })
-  handleSpeedChange = (speed) => this.props.setSpeed(speed)
-  handleThemeChange = (e) => this.props.setTheme(e.target.value)
-  handleVoiceChange = (e) => this.props.setVoice(e.target.value)
   render() {
     const {
       handleColorChange,
       handleLanguageChange,
       handleNameChange,
+      handlePortChange,
       handleSpeedChange,
       handleThemeChange,
       handleVoiceChange,
+      toggleServer,
       props: {
         classes,
         closeSettings,
@@ -83,7 +85,7 @@ class SettingsDialog extends Component {
                 spacing={0}
               >
                 <Grid>
-                  <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={this.toggleServer}>
+                  <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={toggleServer}>
                     {listening ?
                       <Stop />
                     :
@@ -93,7 +95,7 @@ class SettingsDialog extends Component {
                   <TextField
                     id='port'
                     label='Port'
-                    onChange={this.handlePortChange}
+                    onChange={handlePortChange}
                     className={classes.port}
                     defaultValue={port}
                     variant='outlined'
@@ -101,26 +103,26 @@ class SettingsDialog extends Component {
                 </Grid>
                 <br />
                 <Grid>
-                  <ThemeSelect onChange={this.handleThemeChange} value={theme} />
-                  <ColorSelect onChange={this.handleColorChange} value={color} />
+                  <ThemeSelect onChange={handleThemeChange} value={theme} />
+                  <ColorSelect onChange={handleColorChange} value={color} />
                 </Grid>
                 <br />
                 <TextField
                   id='name'
                   label='Display Name'
                   fullWidth
-                  onBlur={this.handleNameChange}
+                  onBlur={handleNameChange}
                   className={classes.message}
                   defaultValue={name}
                   variant='outlined'
                 />
                 <br />
                 <Grid>
-                  <LanguageSelect onChange={this.handleLanguageChange} value={language} />
-                  <VoiceSelect onChange={this.handleVoiceChange} value={voice} language={language} />
+                  <LanguageSelect onChange={handleLanguageChange} value={language} />
+                  <VoiceSelect onChange={handleVoiceChange} value={voice} language={language} />
                 </Grid>
                 <br />
-                <SpeedSlider onChange={this.handleSpeedChange} value={speed} />
+                <SpeedSlider onChange={handleSpeedChange} value={speed} />
               </Grid>
             </div>
           </DialogContent>

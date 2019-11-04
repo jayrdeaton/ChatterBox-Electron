@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'uuid'
 import { voices } from '../refs'
-import { settings_actions, sounds_actions } from '../actions'
+import { sounds_actions } from '../actions'
 import { ChatterHistory, MessageForm, SoundsDialog } from '../components'
 
 import SettingsDialog from './SettingsDialog'
