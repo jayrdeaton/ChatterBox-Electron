@@ -2,7 +2,6 @@ import ChatterHistory from './ChatterHistory'
 import ColorSelect from './ColorSelect'
 import ErrorDialog from './ErrorDialog'
 import LanguageSelect from './LanguageSelect'
-import MessageForm from './MessageForm'
 import SortSelect from './SortSelect'
 import SoundsDialog from './SoundsDialog'
 import SpeedSlider from './SpeedSlider'
@@ -14,7 +13,6 @@ export {
   ColorSelect,
   ErrorDialog,
   LanguageSelect,
-  MessageForm,
   SortSelect,
   SoundsDialog,
   SpeedSlider,

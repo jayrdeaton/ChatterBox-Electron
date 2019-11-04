@@ -5,8 +5,9 @@ import { withStyles } from '@material-ui/core/styles'
 import uuid from 'uuid'
 import { voices } from '../refs'
 import { sounds_actions } from '../actions'
-import { ChatterHistory, MessageForm, SoundsDialog } from '../components'
+import { ChatterHistory, SoundsDialog } from '../components'
 
+import MessageForm from './MessageForm'
 import SettingsDialog from './SettingsDialog'
 
 const { closeSounds } = sounds_actions

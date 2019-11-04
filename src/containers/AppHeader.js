@@ -1,28 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
-import { AppBar, Toolbar, Typography } from '@material-ui/core'
-import { config } from '../refs'
+import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
+import { Settings as SettingsIcon } from '@material-ui/icons'
+import { settings_actions } from '../actions'
 
 import Logo from './Logo'
-import SettingsButton from './SettingsButton'
-import SoundsButton from './SoundsButton'
 
-import { drawer_actions } from '../actions'
-const { openDrawer } = drawer_actions
+const { openSettings } = settings_actions
 
 class AppHeader extends Component {
   render() {
-    const { classes } = this.props
-    const { open } = this.props.drawer
+    const { classes, openSettings } = this.props
     return (
       <AppBar
         position='absolute'
-        className={classNames(classes.appBar, open && classes.appBarShift)}
+        className={classes.appBar}
       >
-        <Toolbar disableGutters={!open} className={classes.toolbar}>
+        <Toolbar className={classes.toolbar}>
           <Logo className={classes.logo} />
           <Typography
             component='h1'
@@ -33,8 +29,9 @@ class AppHeader extends Component {
           >
             ChatterBox
           </Typography>
-          <SoundsButton />
-          <SettingsButton />
+          <IconButton color='inherit' aria-label='toggle settings' className={classes.button} onClick={openSettings}>
+            <SettingsIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     )
@@ -57,30 +54,15 @@ const styles = theme => ({
     width: '100%',
     zIndex: theme.zIndex.drawer + 1,
     WebkitAppRegion: 'drag',
-    paddingTop: theme.spacing(),
-    transition: theme.transitions.create(['width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    // marginLeft: drawerWidth,
-    width: `calc(100% - ${config.drawer_width}px)`,
-    transition: theme.transitions.create(['width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    paddingTop: theme.spacing()
   },
   title: {
     flexGrow: 1,
   }
 })
-const mapStateToProps = ({ drawer }) => {
-  return { drawer }
-}
 AppHeader.propTypes = {
   classes: PropTypes.object.isRequired
 }
-AppHeader = connect(mapStateToProps, { openDrawer })(AppHeader)
+AppHeader = connect(null, { openSettings })(AppHeader)
 AppHeader = withStyles(styles)(AppHeader)
 export default AppHeader

@@ -4,9 +4,8 @@ import AppDrawer from './AppDrawer'
 import AppHeader from './AppHeader'
 import ChatterBox from './ChatterBox'
 import Logo from './Logo'
-import SettingsButton from './SettingsButton'
+import MessageForm from './MessageForm'
 import SettingsDialog from './SettingsDialog'
-import SoundsButton from './SoundsButton'
 import Theme from './Theme'
 import ThemeTypeButton from './ThemeTypeButton'
 
@@ -17,9 +16,8 @@ export {
   AppHeader,
   ChatterBox,
   Logo,
-  SettingsButton,
+  MessageForm,
   SettingsDialog,
-  SoundsButton,
   Theme,
   ThemeTypeButton,
 }

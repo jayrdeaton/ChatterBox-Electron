@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Grid, IconButton, InputAdornment, TextField } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { Autorenew, Clear, Send } from '@material-ui/icons'
-import faker from 'faker'
+import { Album, Clear, Send } from '@material-ui/icons'
+import { sounds_actions } from '../actions'
+
+const { openSounds } = sounds_actions
 
 class MessageForm extends Component {
   state = { last_message: '', message: '' }
@@ -13,7 +16,6 @@ class MessageForm extends Component {
     if (!altKey && !ctrlKey && !shiftKey && charCode === 13) this.handleSubmit(e)
   }
   handleMessageChange = (e) => this.setState({ message: e.target.value })
-  handleRandom = () => this.setState({ message: faker.random.words() })
   handleSubmit = (e) => {
     if (e) e.preventDefault()
     const message = this.state.message || this.state.last_message
@@ -25,9 +27,8 @@ class MessageForm extends Component {
       handleClear,
       handleKeyPress,
       handleMessageChange,
-      handleRandom,
       handleSubmit,
-      props: { classes },
+      props: { classes, openSounds },
       state: { message }
     } = this
     return (
@@ -59,17 +60,19 @@ class MessageForm extends Component {
                       <IconButton
                         edge='end'
                         aria-label='clear message'
+                        className={classes.button}
                         onClick={handleClear}
                       >
-                        <Clear />
+                        <Clear fontSize='inherit' />
                       </IconButton>
                     :
                       <IconButton
                         edge='end'
                         aria-label='random message'
-                        onClick={handleRandom}
+                        className={classes.button}
+                        onClick={openSounds}
                       >
-                        <Autorenew />
+                        <Album fontSize='inherit' />
                       </IconButton>
                     }
 
@@ -79,7 +82,7 @@ class MessageForm extends Component {
             />
             <IconButton
               type='submit'
-              className={classes.submit}
+              className={classes.button}
             >
               <Send fontSize='inherit' />
             </IconButton>
@@ -98,7 +101,7 @@ const styles = theme => ({
   voice: {
     // margin: theme.spacing()
   },
-  submit: {
+  button: {
     // margin: theme.spacing(),
     [theme.breakpoints.down('sm')]: {
       fontSize: 15,
@@ -110,6 +113,7 @@ MessageForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
+MessageForm = connect(null, { openSounds })(MessageForm)
 MessageForm = withStyles(styles)(MessageForm)
 
 export default MessageForm
