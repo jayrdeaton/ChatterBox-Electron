@@ -1,6 +1,8 @@
-import React from "react"
+import React from 'react'
+import { connect } from 'react-redux'
+import { colors } from '../refs'
 
-const Icon = ({ className }) => (
+let Icon = ({ className, settings: { color } }) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     fillRule='evenodd'
@@ -13,7 +15,7 @@ const Icon = ({ className }) => (
   >
     <path fill='none' d='M0 0H2000V2000H0z' />
     <path
-      fill='#4CB2F8'
+      fill={colors[color][300]}
       stroke='#000'
       strokeWidth='23.16'
       d='M1859 709v737l-859 293-859-293V709l859-229 859 229-859 291-859-291 859-229'
@@ -37,7 +39,7 @@ const Icon = ({ className }) => (
       d='M1000 1553.22V1884M1000 871.47v257.13'
     />
     <path
-      fill='#9DD6FD'
+      fill={colors[color][100]}
       stroke='#000'
       strokeWidth='27.78'
       d='M141 472.761l859 398.709 859-398.709L1000 159 141 472.761z'
@@ -51,4 +53,5 @@ const Icon = ({ className }) => (
   </svg>
 )
 
+Icon = connect(({ settings }) => { return { settings } })(Icon)
 export default Icon

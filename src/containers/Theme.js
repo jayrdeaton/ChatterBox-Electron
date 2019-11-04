@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CssBaseline } from '@material-ui/core'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { colors } from '../refs'
 
 class Theme extends Component {
   render() {
-    const { type } = this.props.theme
+    const { settings } = this.props
     const theme = createMuiTheme({
       palette: {
+        primary: colors[settings.color] || colors.default,
       //   primary: {
       //     // light: '#a7b934',
       //     // main: '#343a40',
@@ -25,7 +27,7 @@ class Theme extends Component {
       //     // dark: '#ba000d',
       //     // contrastText: '#000',
       //   },
-        type
+        type: settings.theme
       },
       typography: {
         useNextVariants: true,
@@ -39,11 +41,8 @@ class Theme extends Component {
     )
   }
 }
-const mapStateToProps = ({ theme }) => {
-  return { theme }
-}
 Theme.propTypes = {
-  theme: PropTypes.object.isRequired
+  settings: PropTypes.object.isRequired
 }
-Theme = connect(mapStateToProps)(Theme)
+Theme = connect(({ settings }) => { return { settings } })(Theme)
 export default Theme

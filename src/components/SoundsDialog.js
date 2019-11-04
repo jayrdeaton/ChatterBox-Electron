@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Divider,
   Typography
 } from '@material-ui/core'
@@ -23,7 +22,6 @@ class SoundsDialog extends Component {
         aria-describedby='alert-dialog-description'
         scroll={'body'}
       >
-        <DialogTitle />
         <DialogContent>
           <Typography>Sounds</Typography>
           {sounds.map((sound, index) =>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { Button,
   Dialog,
@@ -8,43 +9,41 @@ import { Button,
   Grid,
   TextField
 } from '@material-ui/core'
-import { LanguageSelect, SpeedSlider, VoiceSelect } from '../components'
+import { settings_actions } from '../actions'
+import { ColorSelect, LanguageSelect, SpeedSlider, ThemeSelect, VoiceSelect } from '../components'
+
+const { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice } = settings_actions
 
 class SettingsDialog extends Component {
-  constructor(props) {
-    super(props)
-    const { language, name, speed, voice } = props
-    this.state = { language, name, speed, voice }
-  }
-  handleLanguageChange = (e) => this.setState({ language: e.target.value, voice: 0 })
-  handleNameChange = (e) => this.setState({ name: e.target.value })
-  handleSpeedChange = (e, speed) => this.setState({ speed })
-  handleVoiceChange = (e) => this.setState({ voice: e.target.value })
-  handleReset = () => this.setState({
-    language: 'English',
-    name: '',
-    speed: 1,
-    voice: 0
-  })
-  handleCancel = () => this.props.onSubmit()
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.props.onSubmit(this.state)
-  }
+  handleColorChange = (e) => this.props.setColor(e.target.value)
+  handleLanguageChange = (e) => this.props.setLanguage(e.target.value)
+  handleNameChange = (e) => this.props.setName(e.target.value)
+  handleSpeedChange = (speed) => this.props.setSpeed(speed)
+  handleThemeChange = (e) => this.props.setTheme(e.target.value)
+  handleVoiceChange = (e) => this.props.setVoice(e.target.value)
   render() {
     const {
-      props: { classes },
-      state: { language, name, speed, voice }
+      handleColorChange,
+      handleLanguageChange,
+      handleNameChange,
+      handleSpeedChange,
+      handleThemeChange,
+      handleVoiceChange,
+      props: {
+        classes,
+        closeSettings,
+        settings: { color, language, name, open, speed, theme, voice }
+      },
     } = this
     return (
       <Dialog
-        open={this.props.open}
-        onClose={this.handleCancel}
+        open={open}
+        onClose={closeSettings}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         scroll={'body'}
       >
-        <form onSubmit={this.handleSubmit}>
+        <form>
           <DialogTitle id='settings-dialog'>Settings</DialogTitle>
           <DialogContent>
             <div className={classes.form}>
@@ -55,17 +54,22 @@ class SettingsDialog extends Component {
                 alignItems='center'
                 spacing={0}
               >
+                <Grid>
+                  <ThemeSelect onChange={this.handleThemeChange} value={theme} />
+                  <ColorSelect onChange={this.handleColorChange} value={color} />
+                </Grid>
+                <br />
                 <TextField
                   id='name'
                   label='Display Name'
                   fullWidth
+                  onBlur={this.handleNameChange}
                   className={classes.message}
-                  value={name}
-                  onChange={this.handleNameChange}
+                  defaultValue={name}
                   variant='outlined'
                 />
                 <br />
-                <Grid container justify='space-evenly'>
+                <Grid>
                   <LanguageSelect onChange={this.handleLanguageChange} value={language} />
                   <VoiceSelect onChange={this.handleVoiceChange} value={voice} language={language} />
                 </Grid>
@@ -75,14 +79,8 @@ class SettingsDialog extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleReset}>
-              Reset
-            </Button>
-            <Button onClick={this.handleCancel} style={{marginLeft: 'auto'}} color='secondary'>
-              Cancel
-            </Button>
-            <Button color='primary' type='submit'>
-              Apply
+            <Button onClick={closeSettings} style={{marginLeft: 'auto'}}>
+              Close
             </Button>
           </DialogActions>
         </form>
@@ -95,5 +93,6 @@ const styles = theme => ({
     margin: theme.spacing(2)
   }
 })
+SettingsDialog = connect(({ settings }) => { return { settings } }, { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
 SettingsDialog = withStyles(styles)(SettingsDialog)
 export default SettingsDialog

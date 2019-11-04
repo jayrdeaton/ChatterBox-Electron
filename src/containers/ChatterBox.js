@@ -4,19 +4,17 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'uuid'
 import { voices } from '../refs'
-import { ChatterHistory, MessageForm, SettingsDialog, SoundsDialog } from '../components'
-
 import { settings_actions, sounds_actions } from '../actions'
-const { closeSettings } = settings_actions
+import { ChatterHistory, MessageForm, SoundsDialog } from '../components'
+
+import SettingsDialog from './SettingsDialog'
+
 const { closeSounds } = sounds_actions
 
 class ChatterBox extends Component {
   constructor(props) {
     super(props)
-
-    const { client, language, name, speed, voice } = this.getDefaults()
-    this.state = {  client, history: [], language, message: '', name, speed, voice, websocket: null }
-
+    this.state = {  history: [], message: '', websocket: null }
     this.MessageForm = createRef()
   }
   componentWillMount() {
@@ -24,28 +22,6 @@ class ChatterBox extends Component {
   }
   componentWillReceiveProps(props) {
     if (props.server.listening && !this.props.server.listening) this.setupWebsocket(props.server.port)
-  }
-
-  getDefaults = () => {
-    let client = localStorage.getItem('chatterbox_client_id')
-    if (!client) {
-      client = uuid.v1()
-      localStorage.setItem('chatterbox_client_id', client)
-    }
-    const language = localStorage.getItem('chatterbox_language') || 'English'
-    const name = localStorage.getItem('chatterbox_name') || ''
-    let speed = localStorage.getItem('chatterbox_speed') || 1
-    speed = parseFloat(speed)
-    // let voice = localStorage.getItem('chatterbox_voice') || Math.round(Math.random() * voices[language].length)
-    let voice = localStorage.getItem('chatterbox_voice') || 0
-    voice = parseFloat(voice)
-    return { client, language, name, speed, voice }
-  }
-  setDefaults = ({ language, name, speed, voice }) => {
-    localStorage.setItem('chatterbox_language', language)
-    localStorage.setItem('chatterbox_name', name)
-    localStorage.setItem('chatterbox_speed', speed)
-    localStorage.setItem('chatterbox_voice', voice)
   }
   setupWebsocket = async (port) => {
     this.setState({ history: [] })
@@ -81,22 +57,13 @@ class ChatterBox extends Component {
     history.push(data)
     this.setState({ history })
   }
-  handleSettingsSubmit = (settings) => {
-    if (settings) {
-      this.setDefaults(settings)
-      const { language, name, speed, voice } = settings
-      this.setState({ language, name, speed, voice })
-    }
-    this.props.closeSettings()
-  }
   handleSubmit = async ({ message, sound }) => {
     if (!message && isNaN(sound)) return
-    const { client, language, name, speed, websocket  } = this.state
-    // console.log(this.state.websocket)
-    // const websocket = this.state.websocket || await this.setupWebsocket()
-
-    let { voice } = this.state
-    voice = voices[language][voice]
+    const {
+      props: { settings: { client, language, name, speed, voice } },
+      state: { websocket }
+    } = this
+    const voice_name = voices[language][voice]
     const object = {
       client,
       id: uuid.v1(),
@@ -104,7 +71,7 @@ class ChatterBox extends Component {
       message,
       name,
       speed,
-      voice,
+      voice: voice_name,
       sound,
       timestamp: new Date()
     }
@@ -119,14 +86,16 @@ class ChatterBox extends Component {
     this.handleSubmit({ message, sound })
   }
   render() {
-    const { classes } = this.props
-    const { client, history, language, name, speed, voice } = this.state
+    const {
+      props: { classes, settings: { client, open }, sounds },
+      state: { history }
+    } = this
     return (
       <div className={classes.root}>
-        <SettingsDialog open={this.props.settings.open} onSubmit={this.handleSettingsSubmit} language={language} name={name} speed={speed} voice={voice} />
-        <SoundsDialog open={this.props.sounds.open} onSubmit={this.handleSubmit} onClose={this.props.closeSounds} />
+        <SettingsDialog open={open} />
+        <SoundsDialog open={sounds.open} onSubmit={this.handleSubmit} onClose={this.props.closeSounds} />
         <div className={classes.formWrapper} ref={this.MessageForm}>
-          <MessageForm voice={voice} onSubmit={this.handleSubmit} />
+          <MessageForm onSubmit={this.handleSubmit} />
         </div>
         <ChatterHistory client={client} history={history} onClick={this.handleReplay} />
       </div>
@@ -183,6 +152,6 @@ ChatterBox.propTypes = {
 
 const mapStateToProps = ({ server, settings, sounds }) => { return { server, settings, sounds } }
 
-ChatterBox = connect(mapStateToProps, { closeSettings, closeSounds })(ChatterBox)
+ChatterBox = connect(mapStateToProps, { closeSounds })(ChatterBox)
 ChatterBox = withStyles(styles)(ChatterBox)
 export default ChatterBox

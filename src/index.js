@@ -5,8 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 import promise from 'redux-promise'
 // import { fetch_middleware } from './middlewares'
 import reducers from './reducers'
-import { App } from './containers'
-import { ThemeProvider } from './providers'
+import { App, Theme } from './containers'
 import * as serviceWorker from './serviceWorker'
 import './style/index.css'
 
@@ -16,9 +15,9 @@ const createStoreWithMiddleware = applyMiddleware(
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
-    <ThemeProvider>
+    <Theme>
       <App />
-    </ThemeProvider>
+    </Theme>
   </Provider>
   , document.getElementById('root'))
 

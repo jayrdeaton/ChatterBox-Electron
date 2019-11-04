@@ -5,8 +5,19 @@ import { Slider, Typography } from '@material-ui/core'
 import { config } from '../refs'
 
 class SpeedSlider extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { value: props.value }
+  }
+  handleChange = (e, value) => this.setState({ value })
+  handleChangeCommitted = () => this.props.onChange(this.state.value)
   render() {
-    const { classes, value } = this.props
+    const {
+      handleChange,
+      handleChangeCommitted,
+      props: { classes },
+      state: { value }
+    } = this
     return (
       <div className={classes.root}>
         <Typography variant='caption' id='speed-slider-label'>Speed {value}</Typography>
@@ -14,8 +25,9 @@ class SpeedSlider extends Component {
           className={classes.slider}
           value={value}
           aria-labelledby='speed-slider-label'
-          onChange={this.props.onChange}
+          onChange={handleChange}
           min={0}
+          onChangeCommitted={handleChangeCommitted}
           step={0.1}
           max={config.speed_limit}
         />
