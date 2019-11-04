@@ -7,17 +7,43 @@ import { Button,
   DialogContent,
   DialogTitle,
   Grid,
+  IconButton,
   TextField
 } from '@material-ui/core'
-import { settings_actions } from '../actions'
+import { PlayArrow, Stop } from '@material-ui/icons'
+import { server_actions, settings_actions } from '../actions'
 import { ColorSelect, LanguageSelect, SpeedSlider, ThemeSelect, VoiceSelect } from '../components'
 
+const { startServer, stopServer } = server_actions
 const { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice } = settings_actions
 
 class SettingsDialog extends Component {
+  state = { port: 3000 }
+  componentWillMount() {
+    window.ipcRenderer.send('init')
+    window.ipcRenderer.once('status', (e, port) => {
+      if (!port) return
+      this.setState({ port })
+      this.props.startServer(port)
+    })
+  }
+  toggleServer = () => {
+    const {
+      props: { startServer, stopServer, server: { listening } },
+      state: { port }
+    } = this
+    if (listening) {
+      window.ipcRenderer.send('stop_server')
+      stopServer()
+    } else {
+      window.ipcRenderer.send('start_server', port)
+      startServer(port)
+    }
+  }
   handleColorChange = (e) => this.props.setColor(e.target.value)
   handleLanguageChange = (e) => this.props.setLanguage(e.target.value)
   handleNameChange = (e) => this.props.setName(e.target.value)
+  handlePortChange = (e) => this.setState({ port: e.target.value })
   handleSpeedChange = (speed) => this.props.setSpeed(speed)
   handleThemeChange = (e) => this.props.setTheme(e.target.value)
   handleVoiceChange = (e) => this.props.setVoice(e.target.value)
@@ -32,13 +58,15 @@ class SettingsDialog extends Component {
       props: {
         classes,
         closeSettings,
+        server: { listening },
         settings: { color, language, name, open, speed, theme, voice }
       },
+      state: { port }
     } = this
     return (
       <Dialog
-        open={open}
-        onClose={closeSettings}
+        open={listening ? open : true}
+        onClose={listening ? closeSettings : null}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         scroll={'body'}
@@ -54,6 +82,24 @@ class SettingsDialog extends Component {
                 alignItems='center'
                 spacing={0}
               >
+                <Grid>
+                  <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={this.toggleServer}>
+                    {listening ?
+                      <Stop />
+                    :
+                      <PlayArrow />
+                    }
+                  </IconButton>
+                  <TextField
+                    id='port'
+                    label='Port'
+                    onChange={this.handlePortChange}
+                    className={classes.port}
+                    defaultValue={port}
+                    variant='outlined'
+                  />
+                </Grid>
+                <br />
                 <Grid>
                   <ThemeSelect onChange={this.handleThemeChange} value={theme} />
                   <ColorSelect onChange={this.handleColorChange} value={color} />
@@ -79,7 +125,7 @@ class SettingsDialog extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={closeSettings} style={{marginLeft: 'auto'}}>
+            <Button onClick={closeSettings} style={{marginLeft: 'auto'}} disabled={listening ? false : true}>
               Close
             </Button>
           </DialogActions>
@@ -89,10 +135,13 @@ class SettingsDialog extends Component {
   }
 }
 const styles = theme => ({
+  button: {
+    marginRight: theme.spacing()
+  },
   form: {
     margin: theme.spacing(2)
   }
 })
-SettingsDialog = connect(({ settings }) => { return { settings } }, { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
+SettingsDialog = connect(({ server, settings }) => { return { server, settings } }, { startServer, stopServer, closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
 SettingsDialog = withStyles(styles)(SettingsDialog)
 export default SettingsDialog

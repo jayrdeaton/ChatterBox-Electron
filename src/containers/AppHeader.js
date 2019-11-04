@@ -7,7 +7,6 @@ import { AppBar, Toolbar, Typography } from '@material-ui/core'
 import { config } from '../refs'
 
 import Logo from './Logo'
-import ServerToolbar from './ServerToolbar'
 import SettingsButton from './SettingsButton'
 import SoundsButton from './SoundsButton'
 
@@ -34,7 +33,6 @@ class AppHeader extends Component {
           >
             ChatterBox
           </Typography>
-          <ServerToolbar />
           <SoundsButton />
           <SettingsButton />
         </Toolbar>
