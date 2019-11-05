@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core/styles'
+import QRImage from 'react-qr-image'
+import { withStyles, withTheme } from '@material-ui/core/styles'
 import { Button,
   Dialog,
   DialogActions,
@@ -18,13 +19,14 @@ const { startServer, stopServer } = server_actions
 const { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice } = settings_actions
 
 class SettingsDialog extends Component {
-  state = { port: 3000 }
+  state = { ip: null, port: 3000 }
   componentWillMount() {
+    if (window.location.hostname && window.location.hostname !== 'localhost') return
     window.ipcRenderer.send('init')
-    window.ipcRenderer.once('status', (e, port) => {
+    window.ipcRenderer.once('status', (e, port, ip) => {
       if (!port) return
-      this.setState({ port })
-      this.props.startServer(port)
+      this.setState({ port, ip })
+      this.props.startServer({ port, ip })
     })
   }
   handleColorChange = (e) => this.props.setColor(e.target.value)
@@ -44,7 +46,10 @@ class SettingsDialog extends Component {
       stopServer()
     } else {
       window.ipcRenderer.send('start_server', port)
-      startServer(port)
+      window.ipcRenderer.once('status', (e, port, ip) => {
+        this.setState({ ip })
+        startServer({ port, ip })
+      })
     }
   }
   render() {
@@ -63,12 +68,13 @@ class SettingsDialog extends Component {
         server: { listening },
         settings: { color, language, name, open, speed, theme, voice }
       },
-      state: { port }
+      state: { ip, port }
     } = this
+    const electron = !window.location.hostname || window.location.hostname === 'localhost'
     return (
       <Dialog
-        open={listening ? open : true}
-        onClose={listening ? closeSettings : null}
+        open={!electron || listening ? open : true}
+        onClose={!electron || listening ? closeSettings : null}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         scroll={'body'}
@@ -84,24 +90,31 @@ class SettingsDialog extends Component {
                 alignItems='center'
                 spacing={0}
               >
-                <Grid>
-                  <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={toggleServer}>
-                    {listening ?
-                      <Stop />
-                    :
-                      <PlayArrow />
-                    }
-                  </IconButton>
-                  <TextField
-                    id='port'
-                    label='Port'
-                    onChange={handlePortChange}
-                    className={classes.port}
-                    defaultValue={port}
-                    variant='outlined'
-                  />
-                </Grid>
-                <br />
+                {electron &&
+                  <div className={classes.server}>
+                    {/*ip && port &&
+                      <QRImage text={`http://${ip}:${port}`} background={this.props.theme.palette.background.paper} color={this.props.theme.palette.text.primary} />
+                    */}
+                    <Grid>
+                      <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={toggleServer}>
+                        {listening ?
+                          <Stop />
+                        :
+                          <PlayArrow />
+                        }
+                      </IconButton>
+                      <TextField
+                        id='port'
+                        label='Port'
+                        onChange={handlePortChange}
+                        className={classes.port}
+                        defaultValue={port}
+                        variant='outlined'
+                      />
+                    </Grid>
+                    <br />
+                  </div>
+                }
                 <Grid>
                   <ThemeSelect onChange={handleThemeChange} value={theme} />
                   <ColorSelect onChange={handleColorChange} value={color} />
@@ -127,7 +140,7 @@ class SettingsDialog extends Component {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={closeSettings} style={{marginLeft: 'auto'}} disabled={listening ? false : true}>
+            <Button onClick={closeSettings} style={{marginLeft: 'auto'}} disabled={!electron || listening ? false : true}>
               Close
             </Button>
           </DialogActions>
@@ -142,8 +155,14 @@ const styles = theme => ({
   },
   form: {
     margin: theme.spacing(2)
+  },
+  server: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   }
 })
 SettingsDialog = connect(({ server, settings }) => { return { server, settings } }, { startServer, stopServer, closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
 SettingsDialog = withStyles(styles)(SettingsDialog)
+SettingsDialog = withTheme(SettingsDialog)
 export default SettingsDialog

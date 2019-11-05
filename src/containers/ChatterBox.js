@@ -25,6 +25,7 @@ class ChatterBox extends Component {
     if (props.server.listening && !this.props.server.listening) this.setupWebsocket(props.server.port)
   }
   setupWebsocket = async (port) => {
+    if (!port) return
     this.setState({ history: [] })
     const websocket = new WebSocket(`ws://${window.location.hostname || 'localhost'}:${port}/websocket`)
     websocket.onmessage = (data) => {

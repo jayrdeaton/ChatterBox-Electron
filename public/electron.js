@@ -4,10 +4,12 @@ const electron = require('electron'),
   isDev = require('electron-is-dev'),
   Store = require('electron-store'),
   store = new Store(),
+  internalIp = require('internal-ip'),
   server = require('./server')
 
 let mainWindow
 let listening_port = null
+const ip = internalIp.v4.sync()
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
@@ -24,19 +26,17 @@ const createMainWindow = () => {
     }
   })
   ipcMain.on('init', (e) => {
-    e.reply('status', listening_port)
+    e.reply('status', listening_port, ip)
   })
   ipcMain.on('start_server', (e, port) => {
     server.listen(port)
     listening_port = port
-    e.reply('started')
+    e.reply('status', port, ip)
   })
   ipcMain.on('stop_server', (e) => {
     server.close()
     listening_port = null
-    e.reply('stopped')
   })
-  mainWindow.on("ping", () => console.log('ping'))
   mainWindow.once('ready-to-show', mainWindow.show)
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`)
   mainWindow.on('closed', () => mainWindow = null)
