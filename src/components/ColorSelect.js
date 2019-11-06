@@ -33,7 +33,7 @@ const styles = theme => ({
     // minWidth: 120,
   },
   select: {
-    // color: theme.palette.primary[500],
+    color: theme.palette.primary[500],
   }
 })
 ColorSelect.propTypes = {
