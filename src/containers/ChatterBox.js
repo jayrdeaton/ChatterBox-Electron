@@ -22,12 +22,13 @@ class ChatterBox extends Component {
     if (!window.location.hostname || window.location.hostname !== 'localhost') this.setupWebsocket(window.location.port)
   }
   componentWillReceiveProps(props) {
+    if (!props.server.listening && this.props.server.listening && this.state.websocket) this.state.websocket.close()
     if (props.server.listening && !this.props.server.listening) this.setupWebsocket(props.server.port)
   }
   setupWebsocket = async (port) => {
     if (!port) return
     this.setState({ history: [] })
-    const websocket = new WebSocket(`ws://${window.location.hostname || 'localhost'}:${port}/websocket`)
+    const websocket = new WebSocket(`ws://${window.location.hostname || 'localhost'}${port ? `:${port}` : ''}/websocket`)
     websocket.onmessage = (data) => {
       const { history } = this.state
       try {
@@ -48,9 +49,9 @@ class ChatterBox extends Component {
         console.error(err)
       }
     }
-    websocket.onclose = () => {
-      setTimeout(this.setupWebsocket, 500)
-    }
+    // websocket.onclose = () => {
+    //   setTimeout(this.setupWebsocket, 500)
+    // }
     await this.setState({ websocket })
     // return websocket
   }
