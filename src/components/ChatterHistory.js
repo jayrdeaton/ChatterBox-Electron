@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ButtonBase, Paper, Typography } from '@material-ui/core'
 import { withStyles, withTheme } from '@material-ui/core/styles'
 import { sounds, voices } from '../refs'
-import classNames from 'class-names'
+import classNames from 'classnames'
 
 let ChatterHistory = ({ classes, client, history, onClick, theme }) => {
   return (

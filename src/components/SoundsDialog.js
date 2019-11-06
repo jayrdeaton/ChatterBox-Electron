@@ -5,8 +5,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  Divider,
-  Typography
+  DialogTitle
 } from '@material-ui/core'
 import faker from 'faker'
 import { sounds } from '../refs'
@@ -23,14 +22,13 @@ class SoundsDialog extends Component {
         scroll={'body'}
       >
         <DialogContent>
-          <Typography>Sounds</Typography>
+          <DialogTitle className={classes.title}>Sounds</DialogTitle>
           {sounds.map((sound, index) =>
             <Button key={sound} variant='contained' color='primary' className={classes.button} onClick={() => onSubmit({ sound: index })}>
               {sound}
             </Button>
           )}
-          <Divider />
-          <Typography>Random</Typography>
+          <DialogTitle className={classes.title}>Random</DialogTitle>
           <Button variant='contained' color='primary' className={classes.button} onClick={() => onSubmit({ message: faker.random.word() })}>
             Word
           </Button>
@@ -43,8 +41,7 @@ class SoundsDialog extends Component {
           <Button variant='contained' color='primary' className={classes.button} onClick={() => onSubmit({ message: faker.address.state() })}>
             State
           </Button>
-          <Divider />
-          <Typography>Lorem</Typography>
+          <DialogTitle className={classes.title}>Lorem</DialogTitle>
           <Button variant='contained' color='primary' className={classes.button} onClick={() => onSubmit({ message: faker.lorem.sentence() })}>
             Sentence
           </Button>
@@ -70,6 +67,9 @@ class SoundsDialog extends Component {
 const styles = theme => ({
   button: {
     margin: theme.spacing(.5)
+  },
+  title: {
+    paddingLeft: 0
   }
 })
 SoundsDialog = withStyles(styles)(SoundsDialog)

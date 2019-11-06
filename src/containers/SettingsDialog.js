@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import QRImage from 'react-qr-image'
+import classNames from 'classnames'
+import QRCode from 'qrcode-svg'
 import { withStyles, withTheme } from '@material-ui/core/styles'
 import { Button,
   Dialog,
@@ -16,7 +17,9 @@ import { server_actions, settings_actions } from '../actions'
 import { ColorSelect, LanguageSelect, SpeedSlider, ThemeSelect, VoiceSelect } from '../components'
 
 const { startServer, stopServer } = server_actions
-const { closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice } = settings_actions
+const { closeSettings, openSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice } = settings_actions
+
+const QR_SIZE = 128
 
 class SettingsDialog extends Component {
   state = { ip: null, port: 3000 }
@@ -24,10 +27,24 @@ class SettingsDialog extends Component {
     if (window.location.hostname && window.location.hostname !== 'localhost') return
     window.ipcRenderer.send('init')
     window.ipcRenderer.once('status', (e, port, ip) => {
-      if (!port) return
-      this.setState({ port, ip })
+      if (!port) {
+        if (!this.props.settings.open) this.props.openSettings()
+        return
+      }
+      this.setState({ ip, port })
       this.props.startServer({ port, ip })
     })
+  }
+  generateQR = ({ ip, port }) => {
+    const { palette } = this.props.theme
+    return new QRCode({
+      content: `http://${ip}:${port}`,
+      padding: 0,
+      background: palette.background.paper,
+      color: palette.text.primary,
+      height: QR_SIZE,
+      width: QR_SIZE
+    }).svg()
   }
   handleColorChange = (e) => this.props.setColor(e.target.value)
   handleLanguageChange = (e) => this.props.setLanguage(e.target.value)
@@ -47,6 +64,7 @@ class SettingsDialog extends Component {
     } else {
       window.ipcRenderer.send('start_server', port)
       window.ipcRenderer.once('status', (e, port, ip) => {
+        if (!port) return
         this.setState({ ip })
         startServer({ port, ip })
       })
@@ -54,6 +72,7 @@ class SettingsDialog extends Component {
   }
   render() {
     const {
+      generateQR,
       handleColorChange,
       handleLanguageChange,
       handleNameChange,
@@ -70,17 +89,17 @@ class SettingsDialog extends Component {
       },
       state: { ip, port }
     } = this
+    const qr = ip && port ? generateQR({ ip, port }) : null
     const electron = !window.location.hostname || window.location.hostname === 'localhost'
     return (
       <Dialog
-        open={!electron || listening ? open : true}
+        open={open}
         onClose={!electron || listening ? closeSettings : null}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         scroll={'body'}
       >
         <form>
-          <DialogTitle id='settings-dialog'>Settings</DialogTitle>
           <DialogContent>
             <div className={classes.form}>
               <Grid
@@ -92,34 +111,29 @@ class SettingsDialog extends Component {
               >
                 {electron &&
                   <div className={classes.server}>
-                    {/*ip && port &&
-                      <QRImage text={`http://${ip}:${port}`} background={this.props.theme.palette.background.paper} color={this.props.theme.palette.text.primary} />
-                    */}
-                    <Grid>
+                    <DialogTitle className={classes.title}>Server</DialogTitle>
+                    <div className={classNames(classes.qr, listening && classes.qr_visible)} dangerouslySetInnerHTML={{__html: qr}} />
+                    <Grid className={classes.group}>
                       <IconButton color='inherit' aria-label='toggle sounds' className={classes.button} onClick={toggleServer}>
-                        {listening ?
-                          <Stop />
-                        :
-                          <PlayArrow />
-                        }
+                        {listening ? <Stop /> : <PlayArrow /> }
                       </IconButton>
                       <TextField
                         id='port'
                         label='Port'
                         onChange={handlePortChange}
-                        className={classes.port}
+                        className={classes.input}
                         defaultValue={port}
                         variant='outlined'
                       />
                     </Grid>
-                    <br />
                   </div>
                 }
-                <Grid>
-                  <ThemeSelect onChange={handleThemeChange} value={theme} />
-                  <ColorSelect onChange={handleColorChange} value={color} />
+                <DialogTitle className={classes.title}>Theme</DialogTitle>
+                <Grid className={classes.group}>
+                  <ThemeSelect className={classes.input} onChange={handleThemeChange} value={theme} />
+                  <ColorSelect className={classes.input} onChange={handleColorChange} value={color} />
                 </Grid>
-                <br />
+                <DialogTitle className={classes.title}>Chatter</DialogTitle>
                 <TextField
                   id='name'
                   label='Display Name'
@@ -130,9 +144,9 @@ class SettingsDialog extends Component {
                   variant='outlined'
                 />
                 <br />
-                <Grid>
-                  <LanguageSelect onChange={handleLanguageChange} value={language} />
-                  <VoiceSelect onChange={handleVoiceChange} value={voice} language={language} />
+                <Grid className={classes.group}>
+                  <LanguageSelect className={classes.input} onChange={handleLanguageChange} value={language} />
+                  <VoiceSelect className={classes.input} onChange={handleVoiceChange} value={voice} language={language} />
                 </Grid>
                 <br />
                 <SpeedSlider onChange={handleSpeedChange} value={speed} />
@@ -151,18 +165,49 @@ class SettingsDialog extends Component {
 }
 const styles = theme => ({
   button: {
-    marginRight: theme.spacing()
+    marginTop: theme.spacing(),
+    marginRight: theme.spacing(),
+    marginBottom: theme.spacing()
   },
   form: {
-    margin: theme.spacing(2)
+    // margin: theme.spacing(2)
   },
   server: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  title: {
+    alignSelf: 'flex-start',
+    paddingLeft: 0
+  },
+  group: {
+    width: '100%',
+    display: 'flex'
+  },
+  input: {
+    flex: 1
+  },
+  qr: {
+    overflow: 'hidden',
+    transition: theme.transitions.create(['height', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    height: 0,
+    marginBottom: 0
+  },
+  qr_visible: {
+    transition: theme.transitions.create(['height', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    height: QR_SIZE,
+    marginBottom: theme.spacing(2)
   }
 })
-SettingsDialog = connect(({ server, settings }) => { return { server, settings } }, { startServer, stopServer, closeSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
+SettingsDialog = connect(({ server, settings }) => { return { server, settings } }, { startServer, stopServer, closeSettings, openSettings, setColor, setLanguage, setName, setSpeed, setTheme, setVoice })(SettingsDialog)
 SettingsDialog = withStyles(styles)(SettingsDialog)
 SettingsDialog = withTheme(SettingsDialog)
 export default SettingsDialog

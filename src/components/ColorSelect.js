@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import {
@@ -9,8 +10,8 @@ import {
 } from '@material-ui/core'
 import { colors } from '../refs'
 
-let ColorSelect = ({ classes, onChange, value }) => (
-  <FormControl className={classes.formControl}>
+let ColorSelect = ({ classes, className, onChange, value }) => (
+  <FormControl className={classNames(classes.formControl, className)}>
     <InputLabel htmlFor='color-select'>Color</InputLabel>
     <Select
       className={classes.select}
@@ -29,7 +30,7 @@ let ColorSelect = ({ classes, onChange, value }) => (
 )
 const styles = theme => ({
   formControl: {
-    minWidth: 120,
+    // minWidth: 120,
   },
   select: {
     // color: theme.palette.primary[500],

@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import {
@@ -8,8 +9,8 @@ import {
   Select,
 } from '@material-ui/core'
 
-let ThemeSelect = ({ classes, onChange, value }) => (
-  <FormControl className={classes.formControl}>
+let ThemeSelect = ({ classes, className, onChange, value }) => (
+  <FormControl className={classNames(classes.formControl, className)}>
     <InputLabel htmlFor='theme-select'>Theme</InputLabel>
     <Select
       value={value}
@@ -26,7 +27,7 @@ let ThemeSelect = ({ classes, onChange, value }) => (
 )
 const styles = theme => ({
   formControl: {
-    minWidth: 120,
+    // minWidth: 120,
   }
 })
 ThemeSelect.propTypes = {
