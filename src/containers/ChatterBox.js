@@ -3,14 +3,17 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import uuid from 'uuid'
+import Lumber from '@infinitetoken/lumber'
 import { voices } from '../refs'
 import { sounds_actions } from '../actions'
 import { ChatterHistory, SoundsDialog } from '../components'
+import { stringifyError } from '../helpers'
 
 import MessageForm from './MessageForm'
 import SettingsDialog from './SettingsDialog'
 
 const { closeSounds } = sounds_actions
+const lumber = Lumber(process.env.REACT_APP_LUMBER_KEY)
 
 class ChatterBox extends Component {
   constructor(props) {
@@ -26,33 +29,34 @@ class ChatterBox extends Component {
     if (props.server.listening && !this.props.server.listening) this.setupWebsocket(props.server.port)
   }
   setupWebsocket = async (port) => {
-    if (!port) return
     this.setState({ history: [] })
     const websocket = new WebSocket(`ws://${window.location.hostname || 'localhost'}${port ? `:${port}` : ''}/websocket`)
     websocket.onmessage = (data) => {
       const { history } = this.state
-      try {
-        const chatter = JSON.parse(data.data)
-        if (chatter instanceof Array) {
-          for (const c of chatter) {
-            c.timestamp = new Date(c.timestamp)
-            c.voice = voices[c.language].indexOf(c.voice)
-            history.push(c)
-          }
-        } else {
-          chatter.timestamp = new Date(chatter.timestamp)
-          chatter.voice = voices[chatter.language].indexOf(chatter.voice)
-          history.push(chatter)
+      const chatter = JSON.parse(data.data)
+      if (chatter instanceof Array) {
+        for (const c of chatter) {
+          c.timestamp = new Date(c.timestamp)
+          c.voice = voices[c.language].indexOf(c.voice)
+          history.push(c)
         }
-        this.setState({ history })
-      } catch(err) {
-        console.error(err)
+      } else {
+        chatter.timestamp = new Date(chatter.timestamp)
+        chatter.voice = voices[chatter.language].indexOf(chatter.voice)
+        history.push(chatter)
       }
+      this.setState({ history })
+    }
+    websocket.onopen = () => {
+      // lumber.debug('websocket opened!')
+    }
+    websocket.onerror = (err) => {
+      lumber.critical('Websocket error', JSON.stringify({ name: err.name, message: err.message }))
     }
     // websocket.onclose = () => {
     //   setTimeout(this.setupWebsocket, 500)
     // }
-    await this.setState({ websocket })
+    this.setState({ websocket })
     // return websocket
   }
   updateHistory = (data) => {
@@ -81,7 +85,7 @@ class ChatterBox extends Component {
     try {
       await websocket.send(JSON.stringify(object))
     } catch(err) {
-      console.error(err)
+      lumber.error('Websocket send', JSON.stringify({ name: err.name, message: err.message }))
     }
   }
   handleReplay = ({ message, sound }) => {

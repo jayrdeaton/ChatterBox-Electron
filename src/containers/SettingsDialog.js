@@ -22,7 +22,7 @@ const { closeSettings, openSettings, setColor, setLanguage, setName, setSpeed, s
 const QR_SIZE = 128
 
 class SettingsDialog extends Component {
-  state = { ip: null, port: 3000 }
+  state = { ip: null, port: 5000 }
   componentWillMount() {
     if (window.location.hostname && window.location.hostname !== 'localhost') return
     window.ipcRenderer.send('init')

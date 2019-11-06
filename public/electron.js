@@ -29,7 +29,7 @@ const createMainWindow = () => {
     e.reply('status', listening_port, ip)
   })
   ipcMain.on('start_server', (e, port) => {
-    server.listen(port)
+    server.listen(port, '0.0.0.0')
     listening_port = port
     e.reply('status', port, ip)
   })
