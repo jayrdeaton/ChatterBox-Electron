@@ -22,7 +22,7 @@ class ChatterBox extends Component {
     this.MessageForm = createRef()
   }
   componentWillMount() {
-    if (!window.location.hostname || window.location.hostname !== 'localhost') this.setupWebsocket(window.location.port)
+    if (!window.location.hostname || window.location.hostname !== 'localhost' || window.location.hostname !== '0.0.0.0') this.setupWebsocket(window.location.port)
   }
   componentWillReceiveProps(props) {
     if (!props.server.listening && this.props.server.listening && this.state.websocket) this.state.websocket.close()
