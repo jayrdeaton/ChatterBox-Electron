@@ -51,7 +51,7 @@ class ChatterBox extends Component {
       // lumber.debug('websocket opened!')
     }
     websocket.onerror = (err) => {
-      lumber.critical('Websocket error', JSON.stringify({ name: err.name, message: err.message }))
+      lumber.critical('Websocket error', stringifyError(err))
     }
     // websocket.onclose = () => {
     //   setTimeout(this.setupWebsocket, 500)
