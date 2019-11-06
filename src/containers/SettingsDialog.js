@@ -124,6 +124,7 @@ class SettingsDialog extends Component {
                         className={classes.input}
                         defaultValue={port}
                         variant='outlined'
+                        disabled={listening}
                       />
                     </Grid>
                   </div>
