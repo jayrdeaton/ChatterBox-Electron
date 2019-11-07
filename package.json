@@ -4,8 +4,18 @@
   "author": "Jay Deaton",
   "build": {
     "appId": "com.chatterbox",
+    "afterSign": "scripts/notarize.js",
     "directories": {
       "buildResources": "./buildResources"
+    },
+    "dmg": {
+      "sign": false
+    },
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "buildResources/entitlements.mac.plist",
+      "entitlementsInherit": "buildResources/entitlements.mac.plist"
     }
   },
   "main": "public/electron.js",
@@ -76,7 +86,9 @@
     ]
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "electron": "^5.0.10",
-    "electron-builder": "^21.2.0"
+    "electron-builder": "^21.2.0",
+    "electron-notarize": "^0.2.0"
   }
 }
